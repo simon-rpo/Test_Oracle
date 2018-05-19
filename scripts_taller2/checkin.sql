@@ -53,9 +53,7 @@ BEGIN
                         FROM VUELOS V 
                             INNER JOIN ITINERARIOS I ON V.ID = I.VUELO_ID 
                         WHERE V.ID = vuelo);
-                        
-
-                        
+                                   
             DBMS_OUTPUT.PUT_LINE('CHECK IN STATUS OK!');
         END IF;
     
