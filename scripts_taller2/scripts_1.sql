@@ -38,7 +38,7 @@ fecha_estimada_salida timestamp,
 fecha_real_salida timestamp,
 estado varchar2(40 byte),
 pasajeros_economica int,
-pasajetos_ejecutiva int,
+PASAJEROS_EJECUTIVA int,
 duracion_real int,
 fecha_estimada_llegada timestamp,
 fecha_real_llegada timestamp,
@@ -84,7 +84,7 @@ id int primary key,
 pasajero_id int,
 itinerario_id int,
 ciudad_id int,
-hora_check_in date,
+hora_check_in TIMESTAMP,
 nombre_contacto varchar(50),
 telefono_contacto varchar(20),
 email_contacto varchar(30)
@@ -92,10 +92,10 @@ email_contacto varchar(30)
 
 CREATE TABLE pasajeros(
 id int primary key,
-nombre varchar(50),
-apellido varchar(50),
+nombre varchar(100),
+apellido varchar(100),
 identificacion int,
-tipo_documento int,
+tipo_documento VARCHAR(80),
 vuelo_id int
 );
 
