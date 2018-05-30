@@ -1,1 +1,3 @@
-# mid_test_oracle
+# Test Oracle
+
+Repositorio de pruebas y practicas de PL/SQL
