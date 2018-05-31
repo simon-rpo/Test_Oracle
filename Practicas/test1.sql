@@ -24,10 +24,28 @@ BEGIN
     END LOOP;
         
     l_tab1 := l_tab1 MULTISET INTERSECT DISTINCT l_tab1;
+    
+    DECLARE
+        datos t_tab:= l_tab1;
+    BEGIN
+        
+        -- Borro la tabla 
+        DELETE FROM distinct_numbers;
+    
+    
+        FOR i IN datos.first .. datos.last
+        LOOP
+            -- Inserto en tabla
+           INSERT INTO  distinct_numbers values (datos(i));
+           -- DBMS_OUTPUT.put_line('Distinct values are '||l_tab1(i));
+        END LOOP;
+        
+    END;
       
     RETURN l_tab1.COUNT;
 END;
 
+/* discarted
 CREATE OR REPLACE PROCEDURE table_distinct_values(datosArray IN arreglo) 
 IS
     TYPE t_tab IS TABLE OF NUMBER;
@@ -64,6 +82,7 @@ BEGIN
     end;
 
 END;
+*/
 
 
 
@@ -74,6 +93,4 @@ begin
     dbms_output.put_line(distinct_values(numbers));
 end;
 
-
-EXEC table_distinct_values (arreglo(2,1,1,2,3,1));
-SELECT * FROM distinct_numbers;
+select * from distinct_numbers;

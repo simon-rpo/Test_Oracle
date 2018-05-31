@@ -1,0 +1,92 @@
+#plsql.execute <<-SQL
+CREATE TYPE number_array AS VARRAY(50) OF INTEGER
+#SQL
+
+#plsql.execute <<-SQL
+CREATE OR REPLACE FUNCTION same_array(arrayA IN number_array, arrayB IN number_array) 
+RETURN VARCHAR 
+IS 
+    TYPE t_tab1 IS TABLE OF INTEGER;
+    l_tab1 t_tab1 := t_tab1();
+    l_tab2 t_tab1 := t_tab1();
+    array_diff3 t_tab1 := t_tab1();
+    isEqual varchar(15) := 'false';
+BEGIN
+    
+    if arrayA is null or  arrayB is null then
+        return isEqual;
+    end if; 
+    
+    if arrayA.COUNT <= 0 OR arrayB.COUNT <= 0 then
+        return isEqual;
+    end if; 
+    
+    
+    l_tab1.EXTEND(arrayA.COUNT);
+    
+    FOR i IN 1 .. arrayA.COUNT 
+    LOOP 
+        l_tab1(i) := power(arrayA(i),2);
+        -- DBMS_OUTPUT.put_line (l_tab1(i)); 
+    END LOOP;
+    
+    l_tab2.EXTEND(arrayB.COUNT);
+    
+    FOR i IN 1 .. arrayB.COUNT 
+    LOOP 
+        l_tab2(i) := arrayB(i);
+        -- DBMS_OUTPUT.put_line (l_tab2(i)); 
+    END LOOP;
+    
+    if l_tab1 <> l_tab2 then
+        array_diff3 := l_tab1 MULTISET EXCEPT l_tab2;
+    else
+        isEqual := 'true';
+        -- DBMS_OUTPUT.put_line ('are equal');
+    end if;
+    
+      
+    RETURN isEqual;
+END
+#SQL
+
+#plsql.execute <<-SQL
+DECLARE
+  A number_array;
+  B number_array;
+  response varchar(15);
+begin
+    A := number_array(121, 144, 19, 161, 19, 144, 19, 11);
+    B := number_array(121, 14641, 20736, 361, 25921, 361, 20736, 361);
+    response := same_array(A,B);
+    dbms_output.put_line(response);
+end
+#SQL
+
+#plsql.execute <<-SQL
+create table representations(
+  num integer,
+  representation varchar2(255)
+)
+#SQL
+
+#plsql.execute <<-SQL
+CREATE OR REPLACE FUNCTION decimal_representation(NumConvert IN int) 
+RETURN VARCHAR2 
+IS 
+BEGIN
+    return TO_CHAR( NumConvert, '999,999,999,999');
+END
+#SQL
+
+#plsql.execute <<-SQL
+CREATE TRIGGER trigger_numeric_represent
+    BEFORE 
+    INSERT OR UPDATE 
+    ON representations 
+    FOR EACH ROW
+BEGIN
+    :new.representation := decimal_representation(:new.num);
+    DBMS_OUTPUT.put_line(decimal_representation(:new.num));
+END
+#SQL
