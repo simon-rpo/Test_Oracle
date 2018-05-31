@@ -1,0 +1,75 @@
+1. Functions (1.5)
+
+For this exercise you need to run:
+
+CREATE TYPE number_array AS VARRAY(50) OF INTEGER;
+
+Given two arrays a and b write a function same_array(a, b) that checks whether the two arrays have the "same" elements, with the same multiplicities. "Same" means, here, that the elements in b are the elements in a squared, regardless of the order.
+
+Examples:
+
+Valid arrays
+a = [121, 144, 19, 161, 19, 144, 19, 11]
+b = [121, 14641, 20736, 361, 25921, 361, 20736, 361]
+
+same_array(a, b) returns "true" because in b 121 is the square of 11, 14641 is the square of 121, 20736 the square of 144, 361 the square of 19, 25921 the square of 161, and so on. It gets obvious if we write b's elements in terms of squares:
+
+a = [121, 144, 19, 161, 19, 144, 19, 11]
+b = [11*11, 121*121, 144*144, 19*19, 161*161, 19*19, 144*144, 19*19]
+
+Invalid arrays
+
+If we change the first number to something else, comp may not return true anymore:
+
+a = [121, 144, 19, 161, 19, 144, 19, 11]
+b = [132, 14641, 20736, 361, 25921, 361, 20736, 361]
+
+same_array(a,b) returns "false" because in b 132 is not the square of any number of a.
+
+a = [121, 144, 19, 161, 19, 144, 19, 11]
+b = [121, 14641, 20736, 36100, 25921, 361, 20736, 361]
+
+same_array(a,b) returns "false" because in b 36100 is not the square of any number of a.
+
+Remarks
+If a or b are nil (or null or None), the problem doesn't make sense so return "false".
+If a or b are empty the result is evident by itself.
+
+Input:
+
+2 params of type number_array
+
+Output
+
+1 String. "true" or "false" (lowercase)
+
+2. Functions - Triggers (2.5)
+
+create table representations(
+  num integer,
+  representation varchar2(255)
+);
+
+Create a function "decimal_representation" as follows:
+
+Finish the solution so that it takes an input n (integer) and returns a string that is the decimal representation of the number grouped by commas after every 3 digits.
+
+Examples
+       1  ->           "1"
+      10  ->          "10"
+     100  ->         "100"
+    1000  ->       "1,000"
+   10000  ->      "10,000"
+  100000  ->     "100,000"
+ 1000000  ->   "1,000,000"
+35235235  ->  "35,235,235"
+
+Input: Integer
+Output: varchar2
+------------------------------------------
+
+Create a before trigger associated to representations table. When a integer value is inserted, you need to call the function decimal_representation inside the trigger's body. With the value returned you must store it in the same row.
+
+So, when yo do Insert into representations (num) values (1000), the result should be
+
+1000 | "1,000" 
